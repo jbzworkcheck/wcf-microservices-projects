@@ -1,0 +1,5 @@
+package com.wipro.productservice.dto.security;
+
+public class RegisterRequest {
+
+}

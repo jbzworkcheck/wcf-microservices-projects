@@ -1,0 +1,45 @@
+package com.wipro.employee.controller;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.wipro.employee.dto.response.EmployeeResponse;
+import com.wipro.employee.service.EmployeeService;
+
+@WebMvcTest(EmployeeController.class)
+public class EmployeeControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockitoBean
+    private EmployeeService employeeService;
+
+    @Test
+    void testGetEmployeeById() throws Exception {
+
+        EmployeeResponse response = new EmployeeResponse();
+
+        response.setId(1);
+        response.setFirstName("Jobin");
+        response.setLastName("Thomas");
+        response.setEmail("jobin@gmail.com");
+        response.setSalary(50000);
+
+        when(employeeService.findById(1))
+                .thenReturn(response);
+
+        mockMvc.perform(get("/api/v1/employees/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.firstName").value("Jobin"));
+    }
+}

@@ -1,0 +1,5 @@
+package com.wipro.productservice.security;
+
+public class UserPrincipal {
+
+}
